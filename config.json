@@ -19,7 +19,7 @@
     "adminPass": "braed25",
     "gameMass": 25000,
     "maxFood": 325,
-    "maxVirus": 10,
+    "maxVirus": 100,
     "slowBase": 4.5,
     "logChat": 0,
     "networkUpdateFactor": 40,
