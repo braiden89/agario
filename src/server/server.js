@@ -258,9 +258,6 @@ io.on('connection', function (socket) {
         if (util.findIndex(users, player.id) > -1) {
             console.log('[INFO] Player ID is already connected, kicking.');
             socket.disconnect();
-        } else if (!util.validNick(player.name)) {
-            socket.emit('kick', 'Invalid username.');
-            socket.disconnect();
         } else {
             console.log('[INFO] Player ' + player.name + ' connected!');
             sockets[player.id] = socket;
@@ -286,6 +283,23 @@ io.on('connection', function (socket) {
                  player.massTotal = 0;
             }
             player.hue = Math.round(Math.random() * 360);
+            if(player.name.toLowerCase() === "red"){
+                player.hue = 0;
+            } else if(player.name.toLowerCase() === "orange"){
+                player.hue = 25;
+            } else if(player.name.toLowerCase() === "yellow"){
+                player.hue = 50;
+            } else if(player.name.toLowerCase() === "green"){
+                player.hue = 125;
+            } else if(player.name.toLowerCase() === "lightblue"||player.name.toLowerCase() === "light blue"){
+                player.hue = 175;
+            } else if(player.name.toLowerCase() === "blue"||player.name.toLowerCase() === "dark blue"||player.name.toLowerCase() === "darkblue"){
+                player.hue = 250;
+            } else if(player.name.toLowerCase() === "purple"){
+                player.hue = 285;
+            } else if(player.name.toLowerCase() === "pink"){
+                player.hue = 310;
+            }
             currentPlayer = player;
             currentPlayer.lastHeartbeat = new Date().getTime();
             users.push(currentPlayer);
@@ -331,14 +345,14 @@ io.on('connection', function (socket) {
         if (c.logChat === 1) {
             console.log('[CHAT] [' + (new Date()).getHours() + ':' + (new Date()).getMinutes() + '] ' + _sender + ': ' + _message);
         }
-        socket.broadcast.emit('serverSendPlayerChat', {sender: _sender, message: _message.substring(0,35)});
+        socket.broadcast.emit('serverSendPlayerChat', {sender: _sender, message: _message.substring(0,50)});
     });
 
     socket.on('pass', function(data) {
         if (data[0] === c.adminPass) {
             console.log('[ADMIN] ' + currentPlayer.name + ' just logged in as an admin!');
-            socket.emit('serverMSG', 'Welcome back ' + currentPlayer.name);
-            socket.broadcast.emit('serverMSG', currentPlayer.name + ' just logged in as admin!');
+            socket.emit('serverMSG', 'You have logged in as admin, ' + currentPlayer.name);
+            //socket.broadcast.emit('serverMSG', currentPlayer.name + ' just logged in as admin!');
             currentPlayer.admin = true;
         } else {
             console.log('[ADMIN] ' + currentPlayer.name + ' attempted to log in with incorrect password.');
@@ -384,6 +398,22 @@ io.on('connection', function (socket) {
             socket.emit('serverMSG', 'You are not permitted to use this command.');
         }
     });
+    
+    socket.on('addmass', function(data) {
+        if (currentPlayer.admin) {
+            if (isNaN(data[0]) === false && data[0] > 0 && data[0] < 15000) {
+                socket.emit('serverMSG', 'Adding '+data[0]+' mass to '+currentPlayer.name+'.');
+                currentPlayer.cells[0].mass += parseInt(data[0]);
+                currentPlayer.massTotal += parseInt(data[0]);
+                currentPlayer.cells[0].radius = util.massToRadius(currentPlayer.cells[0].mass);
+            } else {
+                socket.emit('serverMSG', 'Please enter a valid number under 15,000.');
+            }
+        } else {
+            console.log('[ADMIN] ' + currentPlayer.name + ' is trying to use -addmass but isn\'t an admin.');
+            socket.emit('serverMSG', 'You are not permitted to use this command.');
+        }
+    });
 
     // Heartbeat function, update everytime.
     socket.on('0', function(target) {
@@ -422,34 +452,22 @@ io.on('connection', function (socket) {
             }
         }
     });
-    socket.on('2', function(virusCell) {
-        function splitCell(cell) {
-            if(cell.mass >= c.defaultPlayerMass*2) {
-                cell.mass = cell.mass/2;
-                cell.radius = util.massToRadius(cell.mass);
-                currentPlayer.cells.push({
-                    mass: cell.mass,
-                    x: cell.x,
-                    y: cell.y,
-                    radius: cell.radius,
-                    speed: 25
-                });
-            }
-        }
-
+    socket.on('2', function() {
+        //Split cells.
         if(currentPlayer.cells.length < c.limitSplit && currentPlayer.massTotal >= c.defaultPlayerMass*2) {
-            //Split single cell from virus
-            if(virusCell) {
-              splitCell(currentPlayer.cells[virusCell]);
-            }
-            else {
-              //Split all cells
-              if(currentPlayer.cells.length < c.limitSplit && currentPlayer.massTotal >= c.defaultPlayerMass*2) {
-                  var numMax = currentPlayer.cells.length;
-                  for(var d=0; d<numMax; d++) {
-                      splitCell(currentPlayer.cells[d]);
-                  }
-              }
+            var numMax = currentPlayer.cells.length;
+            for(var d=0; d<numMax; d++) {
+                if(currentPlayer.cells[d].mass >= c.defaultPlayerMass*2) {
+                    currentPlayer.cells[d].mass = currentPlayer.cells[d].mass/2;
+                    currentPlayer.cells[d].radius = util.massToRadius(currentPlayer.cells[d].mass);
+                    currentPlayer.cells.push({
+                        mass: currentPlayer.cells[d].mass,
+                        x: currentPlayer.cells[d].x,
+                        y: currentPlayer.cells[d].y,
+                        radius: currentPlayer.cells[d].radius,
+                        speed: 25
+                    });
+                }
             }
             currentPlayer.lastSplit = new Date().getTime();
         }
@@ -542,13 +560,6 @@ function tickPlayer(currentPlayer) {
 
         var massEaten = massFood.map(eatMass)
             .reduce(function(a, b, c) {return b ? a.concat(c) : a; }, []);
-
-        var virusCollision = virus.map(funcFood)
-           .reduce( function(a, b, c) { return b ? a.concat(c) : a; }, []);
-
-        if(virusCollision > 0 && currentCell.mass > virus[virusCollision].mass) {
-          sockets[currentPlayer.id].emit('virusSplit', z);
-        }
 
         var masaGanada = 0;
         for(var m=0; m<massEaten.length; m++) {
