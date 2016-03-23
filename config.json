@@ -12,7 +12,7 @@
             "from": 100,
             "to": 150
         },
-		"splitMass": 180
+		"splitMass": 10
 	},
     "gameWidth": 5000,
     "gameHeight": 5000,
