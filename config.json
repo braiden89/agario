@@ -1,25 +1,25 @@
 {
     "port": 3000,
-    "foodMass": 3,
+    "foodMass": 10,
     "fireFood": 15,
-    "limitSplit": 16,
+    "limitSplit": 100,
     "defaultPlayerMass": 50,
 	"virus": {
 		"fill": "#ffffff",
 		"stroke": "#ffffff",
-		"strokeWidth": -1,
+		"strokeWidth": 20,
 		"defaultMass": {
-            "from": -1,
-            "to": -1
+            "from": 100,
+            "to": 150
         },
 		"splitMass": 90001
 	},
-    "gameWidth": 3000,
-    "gameHeight": 3000,
-    "adminPass": "admin25",
+    "gameWidth": 5000,
+    "gameHeight": 5000,
+    "adminPass": "braed25",
     "gameMass": 25000,
     "maxFood": 325,
-    "maxVirus": 0,
+    "maxVirus": 10,
     "slowBase": 4.5,
     "logChat": 0,
     "networkUpdateFactor": 40,
