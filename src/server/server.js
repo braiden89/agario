@@ -218,8 +218,18 @@ function balanceMass() {
     }
 }
 
-io.on('connection', function (socket) {
-    console.log('A user connected!', socket.handshake.query.type);
+    socket.on('gotit', function (player) {
+        console.log('[INFO] Player ' + player.name + ' connecting!');
+
+        if (util.findIndex(users, player.id) > -1) {
+            console.log('[INFO] Player ID is already connected, kicking.');
+            socket.disconnect();
+        } else if (!util.validNick(player.name)) {
+            socket.emit('kick', 'Invalid username.');
+            socket.disconnect();
+        } else {
+            console.log('[INFO] Player ' + player.name + ' connected!');
+            sockets[player.id] = socket;
 
     var type = socket.handshake.query.type;
     var radius = util.massToRadius(c.defaultPlayerMass);
