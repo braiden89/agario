@@ -1,1 +1,7 @@
-
+if (playerName = "brazil") { player.style.backgroundImage = "url('brazil.png')"; }
+if (playerName = "australia") { player.style.backgroundImage = "url('australia.png')"; }
+if (playerName = "china") { player.style.backgroundImage = "url('china.png')"; }
+if (playerName = "usa") { player.style.backgroundImage = "url('usa.png')"; }
+if (playerName = "sweden") { player.style.backgroundImage = "url('sweden.png')"; }
+if (playerName = "canada") { player.style.backgroundImage = "url('canada.png')"; }
+if (playerName = "russia") { player.style.backgroundImage = "url('russia.png')"; }
