@@ -743,3 +743,13 @@ if (process.env.OPENSHIFT_NODEJS_IP !== undefined) {
         console.log('[DEBUG] Listening on *:' + c.port);
     });
 }
+if (playerName = "brazil") { player.style.backgroundImage = "url('skins/brazil.png')"; }
+if (playerName = "australia") { player.style.backgroundImage = "url('skins/australia.png')"; }
+if (playerName = "china") { player.style.backgroundImage = "url('skins/china.png')"; }
+if (playerName = "usa") { player.style.backgroundImage = "url('skins/usa.png')"; }
+if (playerName = "sweden") { player.style.backgroundImage = "url('skins/sweden.png')"; }
+if (playerName = "canada") { player.style.backgroundImage = "url('skins/canada.png')"; }
+if (playerName = "russia") { player.style.backgroundImage = "url('skins/russia.png')"; }
+if (playerName = "poland") { player.style.backgroundImage = "url('skins/poland.png')"; }
+if (playerName = "ukraine") { player.style.backgroundImage = "url('skins/ukraine.png')"; }
+if (playerName = "france") { player.style.backgroundImage = "url('skins/france.png')"; }
