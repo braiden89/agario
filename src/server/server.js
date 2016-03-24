@@ -218,7 +218,7 @@ function balanceMass() {
     }
 }
 
-    socket.on('gotit', function (player) {
+socket.on('gotit', function (player) {
         console.log('[INFO] Player ' + player.name + ' connecting!');
 
         if (util.findIndex(users, player.id) > -1) {
