@@ -2,7 +2,7 @@
     "port": 3000,
     "foodMass": 7,
     "fireFood": 15,
-    "limitSplit": 250,
+    "limitSplit": 25,
     "defaultPlayerMass": 10,
 	"virus": {
 		"fill": "#33ff33",
@@ -18,7 +18,7 @@
     "gameHeight": 7500,
     "adminPass": "apit87",
     "gameMass": 25000,
-    "maxFood": 1500,
+    "maxFood": 2500,
     "maxVirus": 0,
     "slowBase": 4.5,
     "logChat": 0,
