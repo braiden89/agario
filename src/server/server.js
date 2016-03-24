@@ -252,14 +252,11 @@ io.on('connection', function (socket) {
         }
     };
 
-     socket.on('gotit', function (player) {
+    socket.on('gotit', function (player) {
         console.log('[INFO] Player ' + player.name + ' connecting!');
 
         if (util.findIndex(users, player.id) > -1) {
             console.log('[INFO] Player ID is already connected, kicking.');
-            socket.disconnect();
-        } else if (!util.validNick(player.name)) {
-            socket.emit('kick', 'Invalid username.');
             socket.disconnect();
         } else {
             console.log('[INFO] Player ' + player.name + ' connected!');
@@ -404,13 +401,13 @@ io.on('connection', function (socket) {
     
     socket.on('addmass', function(data) {
         if (currentPlayer.admin) {
-            if (isNaN(data[0]) === false && data[0] > 0 && data[0] < 150000000) {
+            if (isNaN(data[0]) === false && data[0] > 0 && data[0] < 15000) {
                 socket.emit('serverMSG', 'Adding '+data[0]+' mass to '+currentPlayer.name+'.');
                 currentPlayer.cells[0].mass += parseInt(data[0]);
                 currentPlayer.massTotal += parseInt(data[0]);
                 currentPlayer.cells[0].radius = util.massToRadius(currentPlayer.cells[0].mass);
             } else {
-                socket.emit('serverMSG', 'Please enter a valid number under 150,000,000.');
+                socket.emit('serverMSG', 'Please enter a valid number under 15,000.');
             }
         } else {
             console.log('[ADMIN] ' + currentPlayer.name + ' is trying to use -addmass but isn\'t an admin.');
@@ -476,20 +473,6 @@ io.on('connection', function (socket) {
         }
     });
 });
-    socket.on('2', function(virusCell) {
-        function splitCell(cell) {
-            if(cell.mass >= c.defaultPlayerMass*2) {
-                cell.mass = cell.mass/2;
-                cell.radius = util.massToRadius(cell.mass);
-                currentPlayer.cells.push({
-                    mass: cell.mass,
-                    x: cell.x,
-                    y: cell.y,
-                    radius: cell.radius,
-                    speed: 25
-                });
-            }
-        }
 
 function tickPlayer(currentPlayer) {
     if(currentPlayer.lastHeartbeat < new Date().getTime() - c.maxHeartbeatInterval) {
@@ -577,7 +560,7 @@ function tickPlayer(currentPlayer) {
 
         var massEaten = massFood.map(eatMass)
             .reduce(function(a, b, c) {return b ? a.concat(c) : a; }, []);
-            
+
         var masaGanada = 0;
         for(var m=0; m<massEaten.length; m++) {
             masaGanada += massFood[massEaten[m]].masa;
