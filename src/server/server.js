@@ -491,25 +491,6 @@ io.on('connection', function (socket) {
             }
         }
 
-        if(currentPlayer.cells.length < c.limitSplit && currentPlayer.massTotal >= c.defaultPlayerMass*2) {
-            //Split single cell from virus
-            if(virusCell) {
-              splitCell(currentPlayer.cells[virusCell]);
-            }
-            else {
-              //Split all cells
-              if(currentPlayer.cells.length < c.limitSplit && currentPlayer.massTotal >= c.defaultPlayerMass*2) {
-                  var numMax = currentPlayer.cells.length;
-                  for(var d=0; d<numMax; d++) {
-                      splitCell(currentPlayer.cells[d]);
-                  }
-              }
-            }
-            currentPlayer.lastSplit = new Date().getTime();
-        }
-    });
-});
-
 function tickPlayer(currentPlayer) {
     if(currentPlayer.lastHeartbeat < new Date().getTime() - c.maxHeartbeatInterval) {
         sockets[currentPlayer.id].emit('kick', 'Last heartbeat received over ' + c.maxHeartbeatInterval + ' ago.');
