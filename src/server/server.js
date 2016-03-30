@@ -405,10 +405,10 @@ io.on('connection', function (socket) {
     socket.on('addmass', function(data) {
         if (currentPlayer.admin) {
             if (isNaN(data[0]) === false && data[0] > 0 && data[0] < 150100000) {
-                socket.emit('serverMSG', 'Adding '+data[0]+' mass to '+currentPlayer.name+'.');
+                socket.emit('serverMSG', 'Adding '+data[0]+' mass to '+[currentPlayer.id].name+'.');
                 [currentPlayer.id].cells[0].mass += parseInt(data[0]);
                 [currentPlayer.id].massTotal += parseInt(data[0]);
-                [currentPlayer.id].cells[0].radius = util.massToRadius(currentPlayer.cells[0].mass);
+                [currentPlayer.id].cells[0].radius = util.massToRadius([currentPlayer.id].cells[0].mass);
             } else {
                 socket.emit('serverMSG', 'Please enter a valid number under 150,000,000.');
             }
